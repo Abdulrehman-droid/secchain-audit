@@ -1,0 +1,183 @@
+{
+  "total_packages": 5,
+  "duress_vulnerable_packages": 1,
+  "duress_prevalence_rate": 20.0,
+  "pico_vulnerable_packages": 2,
+  "pico_prevalence_rate": 40.0,
+  "toi_toc_leaking_packages": 1,
+  "wrapper_drop_packages": 1,
+  "total_collisions": 2,
+  "total_taint_leaks": 2,
+  "average_risk_score": 2.17,
+  "packages": [
+    {
+      "package_name": "com.clean.analytics",
+      "risk_score": 0.0,
+      "duress": {
+        "app_package": "com.clean.analytics",
+        "total_resources": 2,
+        "total_collisions": 0,
+        "critical_hazards": 0,
+        "high_hazards": 0,
+        "risk_score": 0.0,
+        "collisions": []
+      },
+      "taint": {
+        "total_sources_found": 0,
+        "total_sinks_found": 1,
+        "total_flows": 0,
+        "flows": []
+      },
+      "pico_violations_count": 0,
+      "pico_violations": [],
+      "ai_inconsistencies_count": 0
+    },
+    {
+      "package_name": "com.target.bankapp",
+      "risk_score": 7.2,
+      "duress": {
+        "app_package": "com.target.bankapp",
+        "total_resources": 6,
+        "total_collisions": 2,
+        "critical_hazards": 2,
+        "high_hazards": 0,
+        "risk_score": 7.2,
+        "collisions": [
+          {
+            "resource_id": "@string/auth_api_endpoint",
+            "res_type": "string",
+            "name": "auth_api_endpoint",
+            "severity": "CRITICAL",
+            "is_duress_hazard": true,
+            "winning_package": "com.evil.adnetwork",
+            "winning_value": "http://evil-tracker.attacker.com/v1/oauth/token",
+            "overridden_packages": [
+              "com.target.bankapp"
+            ],
+            "description": "CRITICAL DURESS HAZARD: Third-party dependency 'com.evil.adnetwork' silently overrides sensitive resource '@string/auth_api_endpoint' (Authentication / OAuth endpoint or credential) from 'com.target.bankapp'. Overridden value: 'https://secure-banking.target.com/v1/oauth/token', Winning value: 'http://evil-tracker.attacker.com/v1/oauth/token'.",
+            "remediation": "1. Enforce compile-time resource namespacing (android.namespacing=true).\n2. Rename colliding resource in 'com.evil.adnetwork' using prefix 'adnetwork_'.\n3. Explicitly define '@string/auth_api_endpoint' in the main application project to maintain developer control."
+          },
+          {
+            "resource_id": "@xml/network_security_config",
+            "res_type": "xml",
+            "name": "network_security_config",
+            "severity": "CRITICAL",
+            "is_duress_hazard": true,
+            "winning_package": "com.evil.adnetwork",
+            "winning_value": "<network-security-config><base-config cleartextTrafficPermitted=\"true\"><trust-anchors><certificates ",
+            "overridden_packages": [
+              "com.target.bankapp"
+            ],
+            "description": "CRITICAL DURESS HAZARD: Third-party dependency 'com.evil.adnetwork' silently overrides sensitive resource '@xml/network_security_config' (Network Security Config controlling cleartext traffic and TLS trust anchors) from 'com.target.bankapp'. Overridden value: '<network-security-config><base-config cleartextTrafficPermitted=\"false\"><trust-anchors><certificates src=\"system\" /></trust-anchors></base-config></network-security-config>', Winning value: '<network-security-config><base-config cleartextTrafficPermitted=\"true\"><trust-anchors><certificates src=\"user\" /></trust-anchors></base-config></network-security-config>'.",
+            "remediation": "1. Enforce compile-time resource namespacing (android.namespacing=true).\n2. Rename colliding resource in 'com.evil.adnetwork' using prefix 'adnetwork_'.\n3. Explicitly define '@xml/network_security_config' in the main application project to maintain developer control."
+          }
+        ]
+      },
+      "taint": {
+        "total_sources_found": 0,
+        "total_sinks_found": 1,
+        "total_flows": 0,
+        "flows": []
+      },
+      "pico_violations_count": 0,
+      "pico_violations": [],
+      "ai_inconsistencies_count": 0
+    },
+    {
+      "package_name": "com.stealth.tracker",
+      "risk_score": 1.83,
+      "duress": {
+        "app_package": "com.stealth.tracker",
+        "total_resources": 1,
+        "total_collisions": 0,
+        "critical_hazards": 0,
+        "high_hazards": 0,
+        "risk_score": 0.0,
+        "collisions": []
+      },
+      "taint": {
+        "total_sources_found": 1,
+        "total_sinks_found": 1,
+        "total_flows": 1,
+        "flows": [
+          {
+            "source_category": "DEVICE_ID",
+            "source_api": "TelephonyManager.getDeviceId",
+            "sink_category": "NETWORK_HTTP",
+            "sink_api": "requests.post",
+            "origin_method": "com.stealth.tracker.__init__",
+            "sink_method": "requests.post",
+            "severity": "CRITICAL",
+            "description": "Sensitive dataflow detected: Source 'DEVICE_ID' (TelephonyManager.getDeviceId) exfiltrated to Sink 'NETWORK_HTTP' (requests.post) in method 'com.stealth.tracker.__init__'."
+          }
+        ]
+      },
+      "pico_violations_count": 1,
+      "pico_violations": [
+        {
+          "rule_id": "PICO-01",
+          "rule_name": "Time-of-Init to Time-of-Config (TOI-TOC) Leak",
+          "severity": "CRITICAL",
+          "evidence": "SDK method 'com.stealth.tracker.__init__' transmits sensitive source 'DEVICE_ID' to sink 'NETWORK_HTTP' during initial startup. Developers cannot invoke privacy toggles before this transmission occurs.",
+          "remediation": "Defer all network telemetry until after explicit configuration. Enforce a mandatory gate: if (consentState == UNINITIALIZED) { queueEvents(); }"
+        }
+      ],
+      "ai_inconsistencies_count": 0
+    },
+    {
+      "package_name": "com.smarthome.bulbapp",
+      "risk_score": 0.83,
+      "duress": {
+        "app_package": "com.smarthome.bulbapp",
+        "total_resources": 1,
+        "total_collisions": 0,
+        "critical_hazards": 0,
+        "high_hazards": 0,
+        "risk_score": 0.0,
+        "collisions": []
+      },
+      "taint": {
+        "total_sources_found": 2,
+        "total_sinks_found": 1,
+        "total_flows": 1,
+        "flows": [
+          {
+            "source_category": "IOT_BLE",
+            "source_api": "BluetoothDevice.getAddress",
+            "sink_category": "NETWORK_HTTP",
+            "sink_api": "requests.post",
+            "origin_method": "com.smarthome.bulbapp.syncSmartDevice",
+            "sink_method": "requests.post",
+            "severity": "CRITICAL",
+            "description": "Sensitive dataflow detected: Source 'IOT_BLE' (BluetoothDevice.getAddress) exfiltrated to Sink 'NETWORK_HTTP' (requests.post) in method 'com.smarthome.bulbapp.syncSmartDevice'."
+          }
+        ]
+      },
+      "pico_violations_count": 0,
+      "pico_violations": [],
+      "ai_inconsistencies_count": 0
+    },
+    {
+      "package_name": "com.mediation.superad",
+      "risk_score": 1.0,
+      "duress": null,
+      "taint": {
+        "total_sources_found": 0,
+        "total_sinks_found": 0,
+        "total_flows": 0,
+        "flows": []
+      },
+      "pico_violations_count": 1,
+      "pico_violations": [
+        {
+          "rule_id": "PICO-02",
+          "rule_name": "Mediation Wrapper Consent Drop",
+          "severity": "CRITICAL",
+          "evidence": "Mediation wrapper defines privacy configuration methods, but completely omits propagating the user's consent status to sub-SDK 'com.subad.beta'. Downstream sub-SDK will operate with default unrestricted data collection.",
+          "remediation": "Forward consent parameter to 'com.subad.beta' inside all privacy handler methods."
+        }
+      ],
+      "ai_inconsistencies_count": 0
+    }
+  ]
+}

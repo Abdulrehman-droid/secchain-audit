@@ -1,0 +1,9 @@
+{
+  "package_name": "com.smarthome.bulbapp",
+  "permissions": [
+    "INTERNET",
+    "BLUETOOTH",
+    "ACCESS_WIFI_STATE",
+    "ACCESS_FINE_LOCATION"
+  ]
+}

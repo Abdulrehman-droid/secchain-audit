@@ -1,0 +1,17 @@
+﻿{
+  "root_package": "com.mediation.superad",
+  "nodes": {
+    "com.mediation.superad": {
+      "dependencies": ["com.subad.alpha", "com.subad.beta"],
+      "category": "mediation_wrapper"
+    },
+    "com.subad.alpha": {
+      "dependencies": [],
+      "category": "ads"
+    },
+    "com.subad.beta": {
+      "dependencies": [],
+      "category": "ads"
+    }
+  }
+}

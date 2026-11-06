@@ -1,0 +1,9 @@
+{
+  "package_name": "com.clean.analytics",
+  "min_sdk": 26,
+  "target_sdk": 34,
+  "permissions": [
+    "INTERNET"
+  ],
+  "components": []
+}

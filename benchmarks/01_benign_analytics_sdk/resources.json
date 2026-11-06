@@ -1,0 +1,6 @@
+{
+  "string": {
+    "clean_analytics_endpoint": "https://api.clean-analytics.com/v1/event",
+    "clean_analytics_version": "2.4.0"
+  }
+}

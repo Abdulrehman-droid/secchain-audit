@@ -1,0 +1,8 @@
+{
+  "package_name": "com.stealth.tracker",
+  "permissions": [
+    "INTERNET",
+    "READ_PHONE_STATE",
+    "ACCESS_FINE_LOCATION"
+  ]
+}

